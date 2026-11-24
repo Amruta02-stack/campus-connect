@@ -50,3 +50,11 @@ def create_token(email, token_type):
     token = jwt.encode(payload=payload, key=SECRET_KEY, algorithm=ALGORITHM)
     return token
 
+def verify_token(token, token_type):
+    try:
+        payload = jwt.decode(token, key=SECRET_KEY, algorithms=[ALGORITHM])
+    except:
+        return False
+    if payload["token_type"] != token_type:
+        return False
+    return payload
