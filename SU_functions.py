@@ -12,9 +12,10 @@ ACCESS_TOKEN_EXPIRY = 120
 REFRESH_TOKEN_EXPIRY = 7 * 24 * 60
 ALGORITHM = "HS256"
 
-DB_PATH = "sqlite:///./campus_connect.db"
-engine = create_engine(DB_PATH)
+DB_PATH = "campus.db"
+engine = create_engine(f"sqlite:///{DB_PATH}")
 Base = declarative_base()
+
 
 class User(Base):
     __tablename__ = "users"
