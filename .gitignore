@@ -1,9 +1,3 @@
-# ---------- Frontend (React + Vite) ----------
-node_modules/
-dist/
-.vite/
-*.local
-
 # ---------- Backend (Python + FastAPI) ----------
 .venv/
 venv/
