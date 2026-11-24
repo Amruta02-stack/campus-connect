@@ -38,4 +38,15 @@ class Club(Base):
 Base.metadata.create_all(engine)
 
 
+def create_token(email, token_type):
+    time = ACCESS_TOKEN_EXPIRY
+    if token_type == "refresh":
+        time = REFRESH_TOKEN_EXPIRY
+    payload = {
+        "email": email,
+        "token_type": token_type,
+        "exp": datetime.now(timezone.utc) + timedelta(minutes=time)
+    }
+    token = jwt.encode(payload=payload, key=SECRET_KEY, algorithm=ALGORITHM)
+    return token
 
