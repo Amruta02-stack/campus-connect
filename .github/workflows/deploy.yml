@@ -4,10 +4,6 @@ name: CI/CD
 on:
   push:
     branches: [main]
-    paths:
-      - 'backend/**'
-      - '.github/workflows/deploy.yml'
-
   workflow_dispatch:
 
 jobs:
@@ -31,8 +27,8 @@ jobs:
       - name: Build and push image
         uses: docker/build-push-action@v6
         with:
-          context: ./backend/backend
-          file: ./backend/backend/dockerfile
+          context: .
+          file: dockerfile
           push: true
           tags: |
             ${{ env.IMAGE }}:latest
