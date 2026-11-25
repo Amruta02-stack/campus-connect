@@ -2,8 +2,8 @@ from fastapi import FastAPI,HTTPException,Header,Body
 from fastapi.middleware.cors import CORSMiddleware
 from datetime import date
 from typing import Optional
-import function as m
-
+import NA_functions as n
+import AM_functions as a
 app=FastAPI()
 
 app.add_middleware(
@@ -14,7 +14,7 @@ app.add_middleware(
 )
 
 def authorize(token,roles):
-    registar=m.verify_token(token=token,token_type="access")
+    registar=n.verify_token(token=token,token_type="access")
     if not registar:
         raise HTTPException(status_code=401,detail="Invalid or Expired access token")
     if registar["role"] not in roles:
@@ -22,8 +22,8 @@ def authorize(token,roles):
     return registar
 
 @app.post("/auth/register")
-def registar(u: m.UserIn):
-    user = m.registar_user(u.username, u.email, u.password)
+def registar(u: a.UserIn):
+    user = n.registar_user(u.username, u.email, u.password)
     if user is None:
         raise HTTPException(status_code=409, detail="Email already registered")
     return {"message": "User registered successfully", "user": user}
