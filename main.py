@@ -1,8 +1,10 @@
-from fastapi import FastAPI, HTTPException, Header
+from fastapi import FastAPI,HTTPException,Header,Body
 from fastapi.middleware.cors import CORSMiddleware
-import function
+from datetime import date
+from typing import Optional
+import function as m
 
-app = FastAPI(title="Campus Connect API", description="Clubs and events management platform")
+app=FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
@@ -10,3 +12,18 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+def authorize(token,roles):
+    registar=m.verify_token(token=token,token_type="access")
+    if not registar:
+        raise HTTPException(status_code=401,detail="Invalid or Expired access token")
+    if registar["role"] not in roles:
+        raise HTTPException(status_code=403,detail="Not allowed for your role")
+    return registar
+
+@app.post("/auth/register")
+def registar(u: m.UserIn):
+    user = m.registar_user(u.username, u.email, u.password)
+    if user is None:
+        raise HTTPException(status_code=409, detail="Email already registered")
+    return {"message": "User registered successfully", "user": user}
