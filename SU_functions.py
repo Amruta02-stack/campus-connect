@@ -113,3 +113,25 @@ def details_of_club(club_id):
               "coordinator_id": club.coordinator_id}
     session.close()
     return result
+
+
+#E5
+def update_club(club_id, username, name, description, category):
+    session = Session(engine)
+    user = session.query(Users).filter_by(username=username).first()
+    if not user or user.role != "coordinator":
+        session.close()
+        return False
+    club = session.query(Club).filter_by(id=club_id).first()
+    if not club or club.coordinator_id != user.id:
+        session.close()
+        return False
+    if name is not None:
+        club.name = name
+    if description is not None:
+        club.description = description
+    if category is not None:
+        club.category = category
+    session.commit()
+    session.close()
+    return True
