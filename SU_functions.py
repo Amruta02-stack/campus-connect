@@ -74,3 +74,17 @@ def create_coordinator_account(username,password,email):
     session.commit()
     session.close()
     return True    
+
+
+#E2
+def new_campus_club(name, description, category, coordinator_id):
+    session = Session(engine)
+    coordinator = session.query(Users).filter_by(id=coordinator_id,role="coordinator").first()
+    if not coordinator:
+        session.close()
+        return False
+    new_club = Club(name=name,description=description,category=category,coordinator_id=coordinator_id)
+    session.add(new_club)
+    session.commit()
+    session.close()
+    return True
