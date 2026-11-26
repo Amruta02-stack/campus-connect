@@ -88,3 +88,13 @@ def new_campus_club(name, description, category, coordinator_id):
     session.commit()
     session.close()
     return True
+
+#E3
+def available_clubs():
+    session = Session(engine)
+    clubs  = session.query(Club).all()
+    result = []
+    for club in clubs:
+        result.append({"id": club.id,"name": club.name,"description": club.description,"category": club.category,"coordinator_id": club.coordinator_id})
+    session.close()
+    return result
