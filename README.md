@@ -25,19 +25,28 @@ The main goal is to make campus activities easier to organize, manage and partic
 | Naidile     | A1, E11–E15       |
 
 Day 1:
-Amruta :
-Naidile:
+Amruta :   
+
+Naidile:          
+
 Supriya:
+
 
 Day 2:
-Amruta :
-Naidile:
-Supriya:
+Amruta :      
+
+Naidile:      
+
+Supriya:     
+
 
 Day 3:
-Amruta :
-Naidile:
-Supriya:
+Amruta :     
+
+Naidile:     
+
+Supriya:     
+
 
 
 ## 3. Technologies Used
