@@ -7,12 +7,10 @@ from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError
 from pydantic import BaseModel,Field,EmailStr
 import os
-from AM_functions import Users, Club
+from AM_functions import Users, Club , engine
 
 
 ph=PasswordHasher()
-
-DB_PATH = "campus.db"
 
 engine = create_engine(f"sqlite:///{DB_PATH}")
 Base = declarative_base()
