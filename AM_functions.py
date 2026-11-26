@@ -8,7 +8,7 @@ from argon2.exceptions import VerifyMismatchError
 from pydantic import BaseModel,Field,EmailStr
 from typing import Optional   
 
-import SU_functions as s
+
 
 ph=PasswordHasher()
 
@@ -104,7 +104,7 @@ class Event_regis(Base):
 
 Base.metadata.create_all(engine)
 
-
+import SU_functions as s
 
 def verify_login(email,password):
     session=Session(engine)
