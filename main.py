@@ -25,3 +25,13 @@ def refresh(refresh_token: str = Header(None)):
     access_token = s.create_token(username=payload["username"],user_type=payload["user_type"],token_type="access")
     return {"access_token": access_token}
 
+#E1
+@app.post("/coordinators")
+def create_coordinator(user: s.CoordinatorRequest, token=Header(None)):
+    payload = s.verify_token(token, "access")
+    if not payload or payload["user_type"] != "admin":
+        raise HTTPException(status_code=403, detail="Access denied")
+    result = s.create_coordinator_account(username=user.username,email=user.email,password=user.password)
+    if not result:
+        raise HTTPException(status_code=409, detail="Username already exists")
+    return {"message": "Coordinator created successfully"}
