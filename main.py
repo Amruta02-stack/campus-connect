@@ -62,3 +62,16 @@ def details_of_club(club_id:int):
     if not result:
         raise HTTPException(status_code=404,detail="Club not found")
     return result
+
+# E5
+@app.patch("/clubs/{club_id}")
+def update_club_info(club_id: int, club: a.ClubUpdate, token=Header(None)):
+    payload = s.verify_token(token, "access")
+    if not payload:
+        raise HTTPException(status_code=401, detail="Invalid token")
+    if payload["user_type"] != "coordinator":
+        raise HTTPException(status_code=403, detail="Coordinator access required")
+    result = s.update_club(club_id=club_id,username=payload["username"],name=club.name,description=club.description,category=club.category)
+    if not result:
+        raise HTTPException(status_code=403, detail="You cannot update this club")
+    return {"message": "Club updated successfully"}
