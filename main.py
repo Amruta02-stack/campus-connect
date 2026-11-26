@@ -35,3 +35,15 @@ def create_coordinator(user: s.CoordinatorRequest, token=Header(None)):
     if not result:
         raise HTTPException(status_code=409, detail="Username already exists")
     return {"message": "Coordinator created successfully"}
+
+
+#E2
+@app.post("/clubs")  
+def new_campus_clubs(club: a.ClubIn ,token=Header(None)):
+    payload = s.verify_token(token, "access")
+    if not payload or payload["user_type"] != "admin":
+        raise HTTPException(status_code=403, detail="Access denied")
+    result = s.new_campus_club(name=club.name,description=club.description,category=club.category,coordinator_id=club.coordinator_id)
+    if not result:
+        raise HTTPException(status_code=404,detail="Coordinator not found")
+    return {"message": "Campus club created successfully"}
