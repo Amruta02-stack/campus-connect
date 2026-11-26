@@ -42,3 +42,13 @@ def create_token(username, user_type, token_type):
     return token
 
 
+def verify_token(token, token_type):
+    if not token:
+        return False
+    try:
+        payload = jwt.decode(jwt=token,key=SECRET_KEY,algorithms=[ALGORITHM])
+    except jwt.InvalidTokenError:
+        return False
+    if payload.get("token_type") == token_type:
+        return payload
+    return False
