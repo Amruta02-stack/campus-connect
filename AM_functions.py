@@ -12,8 +12,7 @@ from typing import Optional
 
 
 ph=PasswordHasher()
-
-DB_PATH = "campus.db"
+DB_PATH = "data/campus.db"
 
 engine = create_engine(f"sqlite:///{DB_PATH}")
 Base = declarative_base()
