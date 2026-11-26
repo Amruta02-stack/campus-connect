@@ -3,6 +3,7 @@ from fastapi import HTTPException
 from datetime import date
 import jwt
 from argon2 import PasswordHasher
+import os
 from AM_functions import engine, Users, Club, Events, Event_regis, SECRET_KEY, ALGORITHM   
 
 ph=PasswordHasher()
@@ -12,7 +13,7 @@ ph=PasswordHasher()
 
 ACCEESS_TOKEN_EXPIRY=120
 REFRESH_TOKEN_EXPIRY=7*24*60
-SECRET_KEY="SECRET321"
+SECRET_KEY=os.getenv("SECRET_KEY")
 ALGORITHM="HS256"
 
 def registar_user(username,email,password,role):

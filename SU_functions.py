@@ -6,6 +6,7 @@ import jwt
 from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError
 from pydantic import BaseModel,Field,EmailStr
+import os
 from AM_functions import Users, Club
 
 
@@ -19,7 +20,7 @@ Base = declarative_base()
 
 ACCEESS_TOKEN_EXPIRY=120
 REFRESH_TOKEN_EXPIRY=7*24*60
-SECRET_KEY="SECRET321"
+SECRET_KEY=os.getenv("SECRET_KEY")
 ALGORITHM="HS256"
 
 
