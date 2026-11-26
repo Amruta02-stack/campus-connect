@@ -4,3 +4,5 @@ sqlalchemy
 pyjwt
 argon2-cffi
 requests
+pydantic
+email-validator
