@@ -103,7 +103,8 @@ class Event_regis(Base):
     attended=Column(Boolean,default=False)
 
 Base.metadata.create_all(engine)
-                             
+
+
 
 def verify_login(email,password):
     session=Session(engine)
@@ -117,8 +118,8 @@ def verify_login(email,password):
         session.close()
         return False
     
-    access_token=s.creat_token(email=email,user_type=user.role,token_type="access")
-    refresh_token=s.creat_token(email=email,user_type=user.role,token_type="refresh")
+    access_token=s.create_token(email=email,role=user.role,token_type="access")
+    refresh_token=s.create_token(email=email,role=user.role,token_type="refresh")
     session.close()
     return {"access_token":access_token,"refresh_token":refresh_token}
 

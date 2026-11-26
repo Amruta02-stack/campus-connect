@@ -7,12 +7,6 @@ import SU_functions as s
 
 app=FastAPI()
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 
 @app.post("/login")
@@ -23,12 +17,12 @@ def login(l:a.LoginIn):
     return token
 
 @app.post("/clubs/{club_id}")
-def register_package(club_id: int,token=Header(None)):
+def apply_club(club_id: int,token=Header(None)):
     payload = s.verify_token(token=token,token_type="access")
     if not payload:
         raise HTTPException(status_code=401,detail="Invalid or Expired token")
     if payload["role"] != "student":
-        raise HTTPException(status_code=403,detail="Access denied")
+        raise HTTPException(status_code=403,detail=f"Access denied your {payload["role"]}")
     if a.apply_club(club_id,payload):
         return {"message": "Applied to clud successful"}
 
