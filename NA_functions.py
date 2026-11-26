@@ -108,100 +108,6 @@ class CoordinatorRequest(BaseModel):
 Base.metadata.create_all(engine)
 
 
-
-# def verify_token(token, token_type):
-#     if not token:
-#         return False
-#     try:
-#         payload = jwt.decode(jwt=token,key=SECRET_KEY,algorithms=[ALGORITHM])
-#     except jwt.InvalidTokenError:
-#         return False
-#     if payload.get("token_type") == token_type:
-#         return payload
-#     return False
-
-# def create_admin():
-#     session = Session(engine)
-#     existing_admin = session.query(Users).filter_by( email="admin@gmail.com").first()
-#     if not existing_admin:
-#         admin = Users(username="admin",email="admin@gmail.com",password=ph.hash("admin12345"),role="admin")
-#         session.add(admin)
-#         session.commit()
-#     session.close()
-
-# #E1 
-# def create_coordinator_account(username,password,email):
-#     session = Session(engine)
-#     existing_user = session.query(Users).filter_by(username=username).first()
-#     if existing_user:
-#         session.close()
-#         return False
-#     session.add(Users(username=username, email=email, password=ph.hash(password), role="coordinator"))
-#     session.commit()
-#     session.close()
-#     return True
-
-# #E2
-# def new_campus_club(name, description, category, coordinator_id):
-#     session = Session(engine)
-#     coordinator = session.query(Users).filter_by(id=coordinator_id,role="coordinator").first()
-#     if not coordinator:
-#         session.close()
-#         return False
-#     new_club = Club(name=name,description=description,category=category,coordinator_id=coordinator_id)
-#     session.add(new_club)
-#     session.commit()
-#     session.close()
-#     return True
-
-
-# #E3
-# def available_clubs():
-#     session = Session(engine)
-#     clubs  = session.query(Club).all()
-#     result = []
-#     for club in clubs:
-#         result.append({"id": club.id,"name": club.name,"description": club.description,"category": club.category,"coordinator_id": club.coordinator_id})
-#     session.close()
-#     return result
-
-
-# #E4
-# def details_of_club(club_id):
-#     session = Session(engine)
-#     club = session.query(Club).filter_by(id=club_id).first()
-#     if not club:
-#         session.close()
-#         return False
-#     result = {"id": club.id,
-#               "name": club.name,
-#               "description": club.description,
-#               "category": club.category,
-#               "coordinator_id": club.coordinator_id}
-#     session.close()
-#     return result
-
-# #E5
-# def update_club(club_id, username, name, description, category):
-#     session = Session(engine)
-#     user = session.query(Users).filter_by(username=username).first()
-#     if not user or user.role != "coordinator":
-#         session.close()
-#         return False
-#     club = session.query(Club).filter_by(id=club_id).first()
-#     if not club or club.coordinator_id != user.id:
-#         session.close()
-#         return False
-#     if name is not None:
-#         club.name = name
-#     if description is not None:
-#         club.description = description
-#     if category is not None:
-#         club.category = category
-#     session.commit()
-#     session.close()
-#     return True
-
 def registar_user(username,email,password,role):
     email=email.strip().lower()
     session=Session(engine)
@@ -228,20 +134,7 @@ def register_for_event(email,event_id):
         raise HTTPException(status_code=404,detail="Event not found")
     if date.today()>event.regis_deadline:
         session.close()
-        raise HTTPException(status_code=400,detail="Registration deadline has passed")
-    # existing=session.query(Event_regis).filter_by(event_id=event_id,stu_id=user.id).first()
-    # if existing and existing.status=="registered":
-    #     session.close()
-    #     raise HTTPException(status_code=409,detail="Already registered for this event")
-    # taken=len(session.query(Event_regis).filter_by(event_id=event_id,status="registered").all())
-    # if taken>=event.max_cap:
-    #     session.close()
-    #     raise HTTPException(status_code=409,detail="Event is full")
-    # if existing:
-    #     existing.status="registered"
-    #     existing.attended=False
-    #     reg=existing
-    
+        raise HTTPException(status_code=400,detail="Registration deadline has passed")    
     reg=Event_regis(event_id=event_id,stu_id=user.id)
     session.add(reg)
     session.commit()

@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException, Header
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, EmailStr, Field
+from sqlalchemy import FunctionFilter
 import NA_functions as function
 app = FastAPI(title="Campus Connect")
 app.add_middleware(
@@ -82,70 +83,3 @@ def participation(token=Header(None)):
     if history["role"] != "student":
         raise HTTPException(status_code=403, detail="Not allowed for your role")
     return function.get_participation_history(email=history["email"])
-
-
-# @app.post("/auth/login")
-# def login(l:function.LoginIn):
-#     token=function.verify_login(email=l.email,password=l.password)
-#     if not token:
-#         raise HTTPException(status_code=401,detail="Access denied")
-#     return token
-
-# # A3
-# @app.post("/auth/refresh")
-# def refresh(refresh_token: str = Header(None)):
-#     payload = function.verify_token(token=refresh_token,token_type="refresh")
-#     if not payload:
-#         raise HTTPException(status_code=401,detail="Invalid or expired refresh token")
-#     access_token = function.create_token(username=payload["username"],user_type=payload["user_type"],token_type="access")
-#     return {"access_token": access_token}
-
-# #E1
-# @app.post("/coordinators")
-# def create_coordinator(user: function.CoordinatorRequest, token=Header(None)):
-#     payload = function.verify_token(token, "access")
-#     if not payload or payload["user_type"] != "admin":
-#         raise HTTPException(status_code=403, detail="Access denied")
-#     result = function.create_coordinator_account(username=user.username,email=user.email,password=user.password)
-#     if not result:
-#         raise HTTPException(status_code=409, detail="Username already exists")
-#     return {"message": "Coordinator created successfully"}
-
-# #E2
-# @app.post("/clubs")  
-# def new_campus_clubs(club: function.ClubIn ,token=Header(None)):
-#     payload = function.verify_token(token, "access")
-#     if not payload or payload["user_type"] != "admin":
-#         raise HTTPException(status_code=403, detail="Access denied")
-#     result = function.new_campus_club(name=club.name,description=club.description,category=club.category,coordinator_id=club.coordinator_id)
-#     if not result:
-#         raise HTTPException(status_code=404,detail="Coordinator not found")
-#     return {"message": "Campus club created successfully"}
-
-# #E3
-# @app.get("/clubs")
-# def available_clubs():
-#     return function.available_clubs()
-
-
-# #E4
-# @app.get("/clubs/{club_id}")
-# def details_of_club(club_id:int):
-#     result = function.details_of_club(club_id)
-#     if not result:
-#         raise HTTPException(status_code=404,detail="Club not found")
-#     return result
-
-
-# # E5
-# @app.patch("/clubs/{club_id}")
-# def update_club_info(club_id: int, club: function.ClubUpdate, token=Header(None)):
-#     payload = function.verify_token(token, "access")
-#     if not payload:
-#         raise HTTPException(status_code=401, detail="Invalid token")
-#     if payload["user_type"] != "coordinator":
-#         raise HTTPException(status_code=403, detail="Coordinator access required")
-#     result = function.update_club(club_id=club_id,username=payload["username"],name=club.name,description=club.description,category=club.category)
-#     if not result:
-#         raise HTTPException(status_code=403, detail="You cannot update this club")
-#     return {"message": "Club updated successfully"}
