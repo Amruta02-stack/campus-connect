@@ -53,3 +53,12 @@ def new_campus_clubs(club: a.ClubIn ,token=Header(None)):
 @app.get("/clubs")
 def available_clubs():
     return s.available_clubs()
+
+
+#E4
+@app.get("/clubs/{club_id}")
+def details_of_club(club_id:int):
+    result = s.details_of_club(club_id)
+    if not result:
+        raise HTTPException(status_code=404,detail="Club not found")
+    return result
