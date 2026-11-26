@@ -479,20 +479,7 @@ Add the deployed AWS EC2 application URL here.
 
 Add the Docker Hub image URL here.
 
-## 12. Screenshots
-
-Add actual screenshots of the working application to this section.
-
-| Screenshot | Description |
-|---|---|
-| Screenshot 1 | Swagger UI showing all API endpoints |
-| Screenshot 2 | Successful user registration |
-| Screenshot 3 | Successful login and token generation |
-| Screenshot 4 | Club creation and club details |
-| Screenshot 5 | Event creation and event listing |
-| Screenshot 6 | Student event registration and participation |
-
-## 13. Known Issues and Future Improvements
+## 12. Known Issues and Future Improvements
 
 The following improvements can make the application more reliable and complete.
 
@@ -505,7 +492,7 @@ The following improvements can make the application more reliable and complete.
 - Develop a frontend interface for easier user interaction.
 - Improve error handling and API response consistency.
 
-## 14. Simple Technical Glossary
+## 13. Simple Technical Glossary
 
 | Term | Meaning |
 |---|---|
@@ -520,7 +507,7 @@ The following improvements can make the application more reliable and complete.
 | CI/CD | Automation used to build, test and deploy software. |
 | AWS EC2 | A cloud-based virtual server used to host applications. |
 
-## 15. Conclusion
+## 14. Conclusion
 
 Campus Connect provides a centralized solution for managing university clubs, student memberships and campus events.
 
