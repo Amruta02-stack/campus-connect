@@ -29,7 +29,8 @@ Day 1:
 
 Amruta :   
 
-Naidile:          
+Naidile: creating the files and planning how to do and completing the A1   
+          creating repo in dockerhub . dockerfilr ,deploy,yml . 
 
 Supriya:
 
@@ -39,8 +40,8 @@ Day 2:
 
 Amruta :      
 
-Naidile:      
-
+Naidile:  completing the E1, E2, E3     
+          instance launching .
 Supriya:     
 
 
@@ -48,7 +49,8 @@ Day 3:
 
 Amruta :     
 
-Naidile:     
+Naidile: E4 and E5 completing with checking the swager of  my endpoints 
+          ec2 working 
 
 Supriya:     
 
