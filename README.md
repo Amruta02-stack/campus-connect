@@ -24,7 +24,9 @@ The main goal is to make campus activities easier to organize, manage and partic
 | Supriya     | A3, E1–E5         |
 | Naidile     | A1, E11–E15       |
 
-Day 1:
+Day 1:     
+
+
 Amruta :   
 
 Naidile:          
@@ -32,7 +34,9 @@ Naidile:
 Supriya:
 
 
-Day 2:
+Day 2:    
+
+
 Amruta :      
 
 Naidile:      
@@ -40,7 +44,8 @@ Naidile:
 Supriya:     
 
 
-Day 3:
+Day 3:     
+
 Amruta :     
 
 Naidile:     
