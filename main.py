@@ -12,7 +12,7 @@ app.add_middleware(
 
 class UserIn(BaseModel):
     username: str = Field(min_length=1)
-    role= str 
+    role :str 
     email: EmailStr
     password: str = Field(min_length=8)
 
