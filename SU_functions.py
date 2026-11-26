@@ -52,3 +52,12 @@ def verify_token(token, token_type):
     if payload.get("token_type") == token_type:
         return payload
     return False
+
+def create_admin():
+    session = Session(engine)
+    existing_admin = session.query(Users).filter_by( email="admin@gmail.com").first()
+    if not existing_admin:
+        admin = Users(username="admin",email="admin@gmail.com",password=ph.hash("admin12345"),role="admin")
+        session.add(admin)
+        session.commit()
+    session.close()
