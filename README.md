@@ -1,4 +1,3 @@
-# campus-connect
 # Campus Connect – Clubs and Events Management Platform
 
 ## 1. Project Overview
