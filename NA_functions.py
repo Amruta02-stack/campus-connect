@@ -1,115 +1,22 @@
-from sqlalchemy import create_engine,Integer,String,Date,Column,ForeignKey,Boolean
-from sqlalchemy.orm import Session,declarative_base
-from fastapi import FastAPI,HTTPException
-from datetime import date,datetime,timedelta,timezone
+from sqlalchemy.orm import Session
+from fastapi import HTTPException
+from datetime import date
 import jwt
 from argon2 import PasswordHasher
-from argon2.exceptions import VerifyMismatchError
-from pydantic import BaseModel,Field,EmailStr
-from typing import Optional   
-
-# import SU_functions as s
+from AM_functions import engine, Users, Club, Events, Event_regis, SECRET_KEY, ALGORITHM   
 
 ph=PasswordHasher()
-
-DB_PATH = "campus.db"
-
-engine = create_engine(f"sqlite:///{DB_PATH}")
-Base = declarative_base()
-
 
 ACCEESS_TOKEN_EXPIRY=120
 REFRESH_TOKEN_EXPIRY=7*24*60
 SECRET_KEY="SECRET321"
 ALGORITHM="HS256"
 
-class LoginIn(BaseModel):
-    email:EmailStr
-    password:str = Field(min_length=8)
-
-class UserIn(BaseModel):  
-    username:str= Field(min_length=1)
-    email:EmailStr
-    password:str = Field(min_length=8)  
-
-class ClubIn(BaseModel):
-    name: str = Field(min_length=1)
-    description: str = Field(min_length=1)
-    category: str = Field(min_length=1)
-    coordinator_id: int
-
-class ClubUpdate(BaseModel):
-    name: Optional[str] = None
-    description: Optional[str] = None
-    category: Optional[str] = None
-
-class EventIn(BaseModel):
-    title: str = Field(min_length=1)
-    description: str = Field(min_length=1)
-    venue: str = Field(min_length=1)
-    date: date
-    regis_deadline: date
-    max_cap: int = Field(gt=0)
-
-class Users(Base):
-    __tablename__="Users"
-
-    id=Column(Integer,primary_key=True)
-    username=Column(String)
-    role=Column(String,default="student")
-    email=Column(String)
-    password=Column(String)
-
-class Club(Base):
-    __tablename__ = "Clubs"
-    
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-    description = Column(String)
-    category = Column(String)
-    coordinator_id = Column(Integer, ForeignKey("Users.id"))
-   
-
-class Club_members(Base):
-    __tablename__ = "Clubs_members"
-
-    id=Column(Integer,primary_key=True)
-    club_id=Column(Integer,ForeignKey("Clubs.id"))
-    stu_id=Column(Integer,ForeignKey("Users.id"))
-    status=Column(String,default="pending")
-
-class Events(Base):
-    __tablename__ = "Events"
-
-    id=Column(Integer,primary_key=True)
-    club_id=Column(Integer,ForeignKey("Clubs.id"))
-    title=Column(String)
-    description=Column(String)
-    venue=Column(String)
-    date=Column(Date)
-    regis_deadline=Column(Date)
-    max_cap=Column(Integer)
-
-
-class Event_regis(Base):
-    __tablename__ = "Event_regis"
-
-    id = Column(Integer,primary_key=True)
-    event_id=Column(Integer,ForeignKey("Events.id"))
-    stu_id=Column(Integer,ForeignKey("Users.id"))
-    status=Column(String,default="registered")
-    attended=Column(Boolean,default=False)
-
-class CoordinatorRequest(BaseModel):
-    username: str = Field(min_length=1)
-    email: EmailStr
-    password: str = Field(min_length=8)    
-
-Base.metadata.create_all(engine)
-
-
 def registar_user(username,email,password,role):
     email=email.strip().lower()
+    role=role.strip().lower()
+    if role not in ["admin","student"]:
+        raise HTTPException(status_code=422,detail="invalid role type")
     session=Session(engine)
     if session.query(Users).filter_by(email=email).first():
         session.close()
@@ -138,7 +45,6 @@ def register_for_event(email,event_id):
     reg=Event_regis(event_id=event_id,stu_id=user.id)
     session.add(reg)
     session.commit()
-    # session.refresh(reg)
     response={"registration_id":reg.id,"event_id":reg.event_id,"status":reg.status,"attended":reg.attended}
     session.close()
     return response
@@ -174,7 +80,7 @@ def mark_attendance(email,event_id,stu_id,attended):
         session.close()
         raise HTTPException(status_code=404,detail="Event not found")
     club=session.query(Club).filter_by(id=event.club_id).first()
-    if club.create_coordinator_id!=create_coordinator.id:
+    if club.id != event.club_id:
         session.close()
         raise HTTPException(status_code=403,detail="This event does not belong to your club")
     event_reg=session.query(Event_regis).filter_by(event_id=event_id,stu_id=stu_id,status="registered").first()
@@ -190,8 +96,8 @@ def mark_attendance(email,event_id,stu_id,attended):
 #E14
 def get_event_participants(email,event_id):
     session=Session(engine)
-    create_coordinator=session.query(Users).filter_by(email=email.strip().lower()).first()
-    if create_coordinator is None:
+    coord=session.query(Users).filter_by(email=email.strip().lower()).first()
+    if  coord is None:
         session.close()
         raise HTTPException(status_code=401,detail="User not found")
     event=session.query(Events).filter_by(id=event_id).first()
@@ -199,7 +105,7 @@ def get_event_participants(email,event_id):
         session.close()
         raise HTTPException(status_code=404,detail="Event not found")
     club=session.query(Club).filter_by(id=event.club_id).first()
-    if club.create_coordinator_id!=create_coordinator.id:
+    if club.id!=event.club_id:
         session.close()
         raise HTTPException(status_code=403,detail="This event does not belong to your club")
     event_regs=session.query(Event_regis).filter_by(event_id=event_id,status="registered").all()
@@ -221,11 +127,15 @@ def get_participation_history(email):
         raise HTTPException(status_code=401,detail="User not found")
     regs=session.query(Event_regis).filter_by(stu_id=user.id,status="registered").all()
     history=[]
+    total_attended=0
     for r in regs:
         e=session.query(Events).filter_by(id=r.event_id).first()
-        history.append({"event_id":e.id,"title":e.title,"venue":e.venue,"date":e.date,"attended":r.attended})
-    history.sort(key=lambda h:h["date"],reverse=True)
+        history.append({"event_id":e.id,"title":e.title,"venue":e.venue,"date":e.event_date,"attended":r.attended})
+ 
+        if r.attended:
+                total_attended+=1
+  
     response={"stu_id":user.id,"total_registered":len(history),
-              "total_attended":len([h for h in history if h["attended"]]),"history":history}
+              "total_attended":total_attended,"history":history}
     session.close()
     return response
