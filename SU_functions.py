@@ -98,3 +98,18 @@ def available_clubs():
         result.append({"id": club.id,"name": club.name,"description": club.description,"category": club.category,"coordinator_id": club.coordinator_id})
     session.close()
     return result
+
+#E4
+def details_of_club(club_id):
+    session = Session(engine)
+    club = session.query(Club).filter_by(id=club_id).first()
+    if not club:
+        session.close()
+        return False
+    result = {"id": club.id,
+              "name": club.name,
+              "description": club.description,
+              "category": club.category,
+              "coordinator_id": club.coordinator_id}
+    session.close()
+    return result
