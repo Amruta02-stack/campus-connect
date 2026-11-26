@@ -61,3 +61,16 @@ def create_admin():
         session.add(admin)
         session.commit()
     session.close()
+
+
+#E1 
+def create_coordinator_account(username,password,email):
+    session = Session(engine)
+    existing_user = session.query(Users).filter_by(username=username).first()
+    if existing_user:
+        session.close()
+        return False
+    session.add(Users(username=username, email=email, password=ph.hash(password), role="coordinator"))
+    session.commit()
+    session.close()
+    return True    
