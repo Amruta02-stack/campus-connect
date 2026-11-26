@@ -25,7 +25,7 @@ ALGORITHM="HS256"
 
 class LoginIn(BaseModel):
     email:EmailStr
-    password:str = Field(min_length=8)
+    password:str 
 
 class UserIn(BaseModel):  
     username:str= Field(min_length=1)
@@ -47,7 +47,7 @@ class EventIn(BaseModel):
     title: str = Field(min_length=1)
     description: str = Field(min_length=1)
     venue: str = Field(min_length=1)
-    date: date
+    event_date: date
     regis_deadline: date
     max_cap: int = Field(gt=0)
 
@@ -88,7 +88,7 @@ class Events(Base):
     title=Column(String)
     description=Column(String)
     venue=Column(String)
-    date=Column(Date)
+    event_date=Column(Date)
     regis_deadline=Column(Date)
     max_cap=Column(Integer)
 
@@ -121,3 +121,132 @@ def verify_login(email,password):
     refresh_token=s.creat_token(email=email,user_type=user.role,token_type="refresh")
     session.close()
     return {"access_token":access_token,"refresh_token":refresh_token}
+
+
+def apply_club(club_id,payload):
+    session=Session(engine)
+    user=session.query(Users).filter_by(email=payload["email"]).first()
+    if user is None:
+        session.close()
+        raise HTTPException(status_code=404,detail="Student Not Found")
+    club=session.query(Club).filter_by(id=club_id).first()
+    if club is None:
+        session.close()
+        raise HTTPException(status_code=404,detail="Club Not Found")
+
+    memeber=session.query(Club_members).filter_by(club_id=club_id,stu_id=user.id).first()
+    if memeber is not None:
+        session.close()
+        raise HTTPException(status_code=409, detail="You already applied to the club")
+    session.add(Club_members(club_id=club_id,stu_id=user.id))
+    session.commit()
+    session.close()    
+    return True
+
+def decide_membership(status,payload,member_id,club_id):
+    if status not in ["approved", "rejected"]:
+        raise HTTPException(status_code=422,detail="Invaild status")
+    session=Session(engine)
+    user = session.query(Users).filter_by(email=payload["email"]).first()
+    if user is None:
+        session.close()
+        raise HTTPException(status_code=404,detail="Student Not Found")
+    club=session.query(Club).filter_by(id=club_id).first()
+    if club is None:
+        session.close()
+        raise HTTPException(status_code=404,detail="Club Not Found")
+    if club.coordinator_id !=user.id:
+        session.close()
+        raise  HTTPException(status_code=403,detail="You are not the club coordinator")
+    memeber=session.query(Club_members).filter_by(id=member_id,club_id=club_id).first()
+    if memeber is None:
+        session.close()
+        raise HTTPException(status_code=409, detail="student Not found")
+
+    memeber.status=status
+    session.commit()
+    session.close()
+    return True
+
+def get_club_members(club_id,payload):
+    session=Session(engine)
+    user = session.query(Users).filter_by(email=payload["email"]).first()
+    if user is None:
+        session.close()
+        raise HTTPException(status_code=404,detail="Student Not Found")
+    club=session.query(Club).filter_by(id=club_id).first()
+    if club is None:
+        session.close()
+        raise HTTPException(status_code=404,detail="Club Not Found")
+    if club.coordinator_id !=user.id:
+        session.close()
+        raise  HTTPException(status_code=403,detail="You are not the club coordinator")
+    members=session.query(Club_members).filter_by(club_id=club_id).all()
+    if members is False:
+        session.close()
+        raise HTTPException(status_code=409, detail="club has no memberes")
+
+    responce=[]
+    for m in members:
+        user=session.query(Users).filter_by(id=m.stu_id).first()
+        responce.append({
+            "member_id":m.id,
+            "student_id":m.stu_id,
+            "name":user.username,
+            "email":user.email,
+            "status":m.status,
+        })
+    session.close()    
+    return responce
+
+
+def create_event(club_id,title,description,venue,event_date,regis_deadline,max_cap,payload):
+    session=Session(engine)
+    user = session.query(Users).filter_by(email=payload["email"]).first()
+    if user is None:
+        session.close()
+        raise HTTPException(status_code=404,detail="Student Not Found")
+    club=session.query(Club).filter_by(id=club_id).first()
+    if club is None:
+        session.close()
+        raise HTTPException(status_code=404,detail="Club Not Found")
+    if club.coordinator_id != user.id:
+        session.close()
+        raise  HTTPException(status_code=403,detail="You are not the club coordinator")
+
+    if regis_deadline > event_date:
+        session.close()
+        raise  HTTPException(status_code=400,detail="Register deadline cannot be after event date")
+    event=Events(
+        club_id=club_id,
+        title=title,
+        description=description,
+        venue=venue,
+        event_date=event_date,
+        regis_deadline=regis_deadline,
+        max_cap =max_cap
+    )
+    session.add(event)
+    session.commit()
+    session.close()
+    return True
+
+
+def get_events():
+    session=Session(engine)
+    events=session.query(Events).all()
+
+    resp=[]
+    for event in events:
+        resp.append({
+            "id": event.id,
+            "club_id": event.club_id,
+            "title": event.title,
+            "description": event.description,
+            "venue": event.venue,
+            "date": event.event_date,
+            "regis_deadline": event.regis_deadline,
+            "max_cap": event.max_cap
+        })
+
+    return resp    
