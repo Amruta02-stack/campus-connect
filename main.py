@@ -47,3 +47,9 @@ def new_campus_clubs(club: a.ClubIn ,token=Header(None)):
     if not result:
         raise HTTPException(status_code=404,detail="Coordinator not found")
     return {"message": "Campus club created successfully"}
+
+
+#E3
+@app.get("/clubs")
+def available_clubs():
+    return s.available_clubs()
