@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import Session,declarative_base,engine
+from sqlalchemy.orm import Session,declarative_base
 from fastapi import HTTPException
 from datetime import datetime,timedelta,timezone
 import jwt
@@ -7,7 +7,7 @@ from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError
 from pydantic import BaseModel,Field,EmailStr
 import os
-from AM_functions import Users, Club 
+from AM_functions import Users, Club,engine
 
 
 ph=PasswordHasher()
