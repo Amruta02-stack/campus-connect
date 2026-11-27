@@ -35,7 +35,7 @@ Day1:
 Amruta:  
 
 
-*Naidile: creating the files and planning how to do and completing the A1   
+Naidile: creating the files and planning how to do and completing the A1   
           creating repo in dockerhub . dockerfilr ,deploy,yml . 
 
           
@@ -46,7 +46,7 @@ Day 2:
 
 Amruta :     
 
-Naidile: completing the E1, E2, E3     
+Naidile: completing the E11, E12, E13     
           instance launching .
 
 Supriya:  Implemented  coordinatior account , to create a new campus club and dipslay the events of the club (E1 ,E2, E3)   
@@ -58,7 +58,7 @@ Day 3:
 Amruta :
 
 
-Naidile:E4 and E5 completing with checking the swager of  my endpoints 
+Naidile:E14 and E15 completing with checking the swager of  my endpoints 
           ec2 working 
 
 Supriya: Implemented  display clubs with the club id and update details of a club (E4,E5) .Testing all endpoints in swagger and final checks 
