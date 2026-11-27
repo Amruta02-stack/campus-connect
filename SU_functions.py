@@ -15,6 +15,7 @@ ph=PasswordHasher()
 ACCEESS_TOKEN_EXPIRY=120
 REFRESH_TOKEN_EXPIRY=7*24*60
 ALGORITHM="HS256"
+SECRET_KEY=os.getenv("SECRET_KEY")
 
 
 class CoordinatorRequest(BaseModel):
@@ -32,7 +33,7 @@ def create_token(email, role, token_type):
         "role": role,
         "exp": datetime.now(timezone.utc) + timedelta(minutes=time)
     }
-    token = jwt.encode(payload=payload,algorithm=ALGORITHM)
+    token = jwt.encode(payload=payload,key = SECRET_KEY,algorithm=ALGORITHM)
     return token
 
 
@@ -40,7 +41,7 @@ def verify_token(token, token_type):
     if not token:
         return False
     try:
-        payload = jwt.decode(jwt=token,algorithms=[ALGORITHM])
+        payload = jwt.decode(jwt=token,key=SECRET_KEY,algorithms=[ALGORITHM])
     except jwt.InvalidTokenError:
         return False
     if payload.get("token_type") == token_type:
