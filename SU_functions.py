@@ -7,7 +7,7 @@ from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError
 from pydantic import BaseModel,Field,EmailStr
 import os
-from AM_functions import Users, Club , engine
+from AM_functions import Users, Club 
 
 
 ph=PasswordHasher()
