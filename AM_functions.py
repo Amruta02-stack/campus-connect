@@ -12,9 +12,9 @@ from typing import Optional
 
 
 ph=PasswordHasher()
-DB_PATH = "data/campus.db"
+DB_PATH = "campus.db"
 
-engine = create_engine(f"sqlite:///{DB_PATH}")
+engine = create_engine("sqlite:///./campus.db")
 Base = declarative_base()
 
 
