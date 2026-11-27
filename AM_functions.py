@@ -20,7 +20,6 @@ Base = declarative_base()
 
 ACCEESS_TOKEN_EXPIRY=120
 REFRESH_TOKEN_EXPIRY=7*24*60
-SECRET_KEY=os.getenv("SECRET_KEY")
 ALGORITHM="HS256"
 
 class LoginIn(BaseModel):
