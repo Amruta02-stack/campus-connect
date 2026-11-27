@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import Session,declarative_base
+from sqlalchemy.orm import Session,declarative_base,engine
 from fastapi import HTTPException
 from datetime import datetime,timedelta,timezone
 import jwt
