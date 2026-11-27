@@ -18,7 +18,7 @@ ALGORITHM="HS256"
 def registar_user(username,email,password,role):
     email=email.strip().lower()
     role=role.strip().lower()
-    if role not in ["admin","student"]:
+    if role not in ["admin","student","super_admin"]:
         raise HTTPException(status_code=422,detail="invalid role type")
     session=Session(engine)
     if session.query(Users).filter_by(email=email).first():
