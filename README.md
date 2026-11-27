@@ -27,7 +27,6 @@ Team Members: Amrutha ,Naidile ,Supriya
 | Amruta      | A2, E6–E10        |
 | Supriya     | A3, E1–E5         |
 | Naidile     | A1, E11–E15       |
-**
 
 Day1:
 
