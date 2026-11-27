@@ -4,7 +4,7 @@ from datetime import date
 import jwt
 from argon2 import PasswordHasher
 import os
-from AM_functions import engine, Users, Club, Events, Event_regis, SECRET_KEY, ALGORITHM   
+from AM_functions import engine, Users, Club, Events, Event_regis,  ALGORITHM   
 
 ph=PasswordHasher()
 
