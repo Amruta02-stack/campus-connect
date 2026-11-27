@@ -62,27 +62,6 @@ def create_admin():
     session.close()
 
 
-def verify_token(token, token_type):
-    if not token:
-        return False
-    try:
-        payload = jwt.decode(jwt=token,key=SECRET_KEY,algorithms=[ALGORITHM])
-    except jwt.InvalidTokenError:
-        return False
-    if payload.get("token_type") == token_type:
-        return payload
-    return False
-
-def create_admin():
-    session = Session(engine)
-    existing_admin = session.query(Users).filter_by( email="admin@gmail.com").first()
-    if not existing_admin:
-        admin = Users(username="admin",email="admin@gmail.com",password=ph.hash("admin12345"),role="admin")
-        session.add(admin)
-        session.commit()
-    session.close()
-
-
 #E1 
 def create_coordinator_account(username,password,email):
     session = Session(engine)
