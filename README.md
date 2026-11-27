@@ -27,36 +27,41 @@ Team Members: Amrutha ,Naidile ,Supriya
 | Amruta      | A2, E6–E10        |
 | Supriya     | A3, E1–E5         |
 | Naidile     | A1, E11–E15       |
+**
 
-**Day 1:  **   
+Day1:
 
 
-**Amruta **:   
+Amruta:  
 
-**Naidile**: creating the files and planning how to do and completing the A1   
+
+*Naidile: creating the files and planning how to do and completing the A1   
           creating repo in dockerhub . dockerfilr ,deploy,yml . 
 
-**Supriya**:  Created tables, set up project dependencies and implemented -create_token, verify_token , refresh token ,README.md file and setup the base of the project
+          
+Supriya: Created tables, set up project dependencies and implemented -create_token, verify_token , refresh token ,README.md file and setup the base of the project
 
 
-**Day 2:**
+Day 2:
 
-**Amruta :**      
+Amruta :     
 
-**Naidile: ** completing the E1, E2, E3     
+Naidile: completing the E1, E2, E3     
           instance launching .
 
-**Supriya:**  Implemented  coordinatior account , to create a new campus club and dipslay the events of the club (E1 ,E2, E3)   
+Supriya:  Implemented  coordinatior account , to create a new campus club and dipslay the events of the club (E1 ,E2, E3)   
 
-**
-Day 3:  **   
 
-**Amruta :  **   
+Day 3:
 
-**Naidile:** E4 and E5 completing with checking the swager of  my endpoints 
+
+Amruta :
+
+
+Naidile:E4 and E5 completing with checking the swager of  my endpoints 
           ec2 working 
 
-**Supriya:** Implemented  display clubs with the club id and update details of a club (E4,E5) .Testing all endpoints in swagger and final checks 
+Supriya: Implemented  display clubs with the club id and update details of a club (E4,E5) .Testing all endpoints in swagger and final checks 
 
 
 ## 3. Technologies Used
