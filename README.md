@@ -16,6 +16,10 @@ The application provides three types of users:
 
 The main goal is to make campus activities easier to organize, manage and participate in.
 
+1. Project and Team
+Project Name: Campus Connect – Clubs and Events Management Platform
+Team Members: Amrutha ,Naidile ,Supriya
+
 ## 2. Team Contributions
 
 | Team Member | API Contributions |
@@ -32,7 +36,7 @@ Amruta :
 Naidile: creating the files and planning how to do and completing the A1   
           creating repo in dockerhub . dockerfilr ,deploy,yml . 
 
-Supriya:
+Supriya:  Created tables, set up project dependencies and implemented -create_token, verify_token , refresh token ,README.md file and setup the base of the project
 
 
 Day 2:    
@@ -43,7 +47,7 @@ Amruta :
 Naidile:  completing the E1, E2, E3     
           instance launching .
 
-Supriya:     
+Supriya:  Implemented  coordinatior account , to create a new campus club and dipslay the events of the club (E1 ,E2, E3)   
 
 
 Day 3:     
@@ -53,8 +57,7 @@ Amruta :
 Naidile: E4 and E5 completing with checking the swager of  my endpoints 
           ec2 working 
 
-Supriya:     
-
+Supriya: Implemented  display clubs with the club id and update details of a club (E4,E5) .Testing all endpoints in swagger and final checks 
 
 
 ## 3. Technologies Used
@@ -142,119 +145,6 @@ These APIs handle clubs, memberships, events and student participation.
 | E14 | GET | `/events/{event_id}/participants` | Displays event participants |
 | E15 | GET | `/students/participation` | Displays student participation history |
 
-### 5.3 API Request Examples
-
-The following examples demonstrate how some APIs receive information.
-
-**User Registration – A1**
-
-```json
-{
-    "username": "student1",
-    "role": "student",
-    "email": "student@gmail.com",
-    "password": "password123"
-}
-```
-
-**User Login – A2**
-
-```json
-{
-    "email": "student@gmail.com",
-    "password": "password123"
-}
-```
-
-**Create Coordinator – E1**
-
-```json
-{
-    "username": "coordinator1",
-    "email": "coordinator@gmail.com",
-    "password": "password123"
-}
-```
-
-**Create Club – E2**
-
-```json
-{
-    "name": "Coding Club",
-    "description": "A club for programming enthusiasts",
-    "category": "Technology",
-    "coordinator_id": 2
-}
-```
-
-**Create Event – E9**
-
-The `club_id` is passed as a query parameter.
-
-Example: `/events?club_id=1`
-
-Request body:
-
-```json
-{
-    "title": "Coding Workshop",
-    "description": "A workshop on programming fundamentals",
-    "venue": "Seminar Hall",
-    "event_date": "2026-12-20",
-    "regis_deadline": "2026-12-15",
-    "max_cap": 50
-}
-```
-
-**Mark Attendance – E13**
-
-```json
-{
-    "stu_id": 3,
-    "attended": true
-}
-```
-
-### 5.4 API Authentication
-
-Campus Connect uses JWT (JSON Web Tokens) to identify authenticated users.
-
-After logging in, the user receives:
-
-- **Access Token:** Used to access protected APIs.
-- **Refresh Token:** Used to generate a new access token when required.
-
-For protected APIs, pass the access token in the request header:
-
-```http
-token: <your_access_token>
-```
-
-For the refresh API, pass the refresh token:
-
-```http
-refresh_token: <your_refresh_token>
-```
-
-The application also uses role-based access control, which means users can access APIs according to their assigned roles.
-
-### 5.5 API Testing
-
-The APIs can be explored and tested using Swagger UI.
-
-After running the application, open:
-
-`http://127.0.0.1:8000/docs`
-
-Swagger UI displays the available endpoints and allows users to send requests and view responses.
-
-## 6. Database Design
-
-Campus Connect uses **SQLite** to store information about users, clubs, memberships, events and registrations.
-
-SQLAlchemy is used to interact with the database.
-
-The application contains five database tables.
 
 ### 6.1 Users
 
@@ -329,7 +219,6 @@ campus-connect/
 ├── AM_functions.py
 ├── NA_functions.py
 ├── SU_functions.py
-├── client.py
 ├── requirements.txt
 ├── dockerfile
 ├── .gitignore
@@ -348,7 +237,6 @@ campus-connect/
 | `AM_functions.py` | Contains database models, login and club-related functions |
 | `NA_functions.py` | Contains user registration, event registration and attendance functions |
 | `SU_functions.py` | Contains authentication, token and coordinator management functions |
-| `client.py` | Client-side script, if used |
 | `requirements.txt` | Lists the Python dependencies |
 | `dockerfile` | Contains instructions to build the Docker image |
 | `.gitignore` | Specifies files Git should ignore |
@@ -447,11 +335,6 @@ This means that when code is pushed to the configured GitHub branch, the workflo
 6. GitHub Actions connects to the AWS EC2 instance through SSH.
 7. The new image is pulled and the application container is restarted.
 
-The workflow is stored in:
-
-```text
-.github/workflows/deploy.yml
-```
 
 ### GitHub Secrets
 
@@ -464,6 +347,7 @@ The workflow uses the following secrets:
 | `EC2_HOST` | EC2 server address |
 | `EC2_USER` | EC2 login username |
 | `EC2_SSH_KEY` | SSH private key used for deployment |
+|  `SECRET_KEY` | secret key |
 
 ## 11. Project Links
 
@@ -475,37 +359,6 @@ https://github.com/Amruta02-stack/campus-connect
 
 Add the deployed AWS EC2 application URL here.
 
-**Docker Hub Image:**
-
-Add the Docker Hub image URL here.
-
-## 12. Known Issues and Future Improvements
-
-The following improvements can make the application more reliable and complete.
-
-- Add duplicate event registration validation.
-- Enforce maximum event capacity during registration.
-- Improve coordinator authorization when viewing participants and marking attendance.
-- Give club details and club member retrieval separate API routes.
-- Store sensitive credentials and JWT secrets using environment variables.
-- Improve database persistence configuration for Docker deployment.
-- Develop a frontend interface for easier user interaction.
-- Improve error handling and API response consistency.
-
-## 13. Simple Technical Glossary
-
-| Term | Meaning |
-|---|---|
-| API | A way for different parts of an application to communicate with each other. |
-| Backend | The part of an application that handles data and application logic. |
-| Database | A place where application information is stored. |
-| SQLite | A lightweight database used by this project. |
-| JWT | A digital token used to identify authenticated users. |
-| Authentication | The process of verifying a user's identity. |
-| Authorization | Checking what a user is allowed to access. |
-| Docker | A tool that packages an application so it can run in different environments. |
-| CI/CD | Automation used to build, test and deploy software. |
-| AWS EC2 | A cloud-based virtual server used to host applications. |
 
 ## 14. Conclusion
 
